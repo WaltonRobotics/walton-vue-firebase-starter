@@ -100,13 +100,37 @@ Open the URL it prints in your browser.
 
 ## macOS or Linux
 
+Install Git with your system package manager:
+
 ```sh
 # macOS, using Homebrew (https://brew.sh)
-brew install git node
+brew install git
 
 # Debian/Ubuntu Linux
-sudo apt update && sudo apt install git nodejs npm
+sudo apt update && sudo apt install git
 ```
+
+For Node.js, use **[nvm](https://github.com/nvm-sh/nvm)** (Node Version Manager) rather
+than installing Node directly from Homebrew/apt. This project needs Node 22.18+ (see the
+`engines` field in `package.json`), and nvm lets you install and switch Node versions
+per-project instead of being stuck with whatever version your system happens to have —
+useful the first time you work on a second project that needs a different one.
+
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+```
+
+Close and reopen your terminal (or run `source ~/.bashrc` / `source ~/.zshrc`), then:
+
+```sh
+nvm install --lts
+nvm use --lts
+node --version
+npm --version
+```
+
+This repo has a `.nvmrc` file, so once you `cd` into it you can just run `nvm use` and
+it'll pick the right version automatically.
 
 Then install [VS Code](https://code.visualstudio.com/) and its recommended extensions,
 configure Git the same way as step 4 above, and continue from step 5.
