@@ -1,0 +1,71 @@
+:root {
+  --color-background: #ffffff;
+  --color-heading: #1a1a1a;
+  --color-text: #2c2c2c;
+  --color-text-muted: #767676;
+  --color-border: #d9d9d9;
+  --color-primary: #2563eb;
+  --color-error: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  line-height: 1.5;
+}
+
+main {
+  padding: 0 1.5rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-heading);
+}
+
+a {
+  color: var(--color-primary);
+}
+
+label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+input,
+button {
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+
+button {
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.delete-button {
+  background-color: transparent;
+  color: var(--color-error);
+  border-color: var(--color-error);
+}

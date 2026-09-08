@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Tasks: a signed-in user can only read/write their own tasks (see the
+    // "uid" field written in TasksView.vue when a task is created).
+    match /tasks/{taskId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.uid;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+    }
+
+    // Profiles: a signed-in user can only read/write their own profile doc,
+    // where the document ID is their own uid.
+    match /profiles/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
