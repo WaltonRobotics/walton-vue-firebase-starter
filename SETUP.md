@@ -69,19 +69,22 @@ cd walton-vue-firebase-starter
 npm install
 ```
 
-### 6. Set up Firebase
+### 6. Run it
 
-Follow the **"Set up your Firebase project"** and **"Install and configure the app"**
-sections in [README.md](README.md) — that covers creating a Firebase project and filling
-in your `.env` file.
-
-### 7. Run it
+No Firebase account or project needed — this project develops against local emulators.
+Open **two** terminals:
 
 ```powershell
-npm run dev
+npm run emulators   # terminal 1
 ```
 
-Open the URL it prints in your browser.
+```powershell
+npm run dev          # terminal 2
+```
+
+Open the URL the second command prints in your browser. See
+[README.md](README.md) for what to try once it's running, and
+[DEPLOY.md](DEPLOY.md) for when you're ready to put the app online.
 
 ### Troubleshooting (Windows)
 

@@ -5,12 +5,24 @@ working examples of Google sign-in, a real-time to-do list (Firestore), and a
 profile-photo uploader (Storage), so you can see how the pieces fit together before
 building your own features.
 
+Day-to-day development runs entirely against the **Firebase Local Emulator Suite** —
+fake Auth, Firestore, and Storage servers that run on your own computer. That means:
+
+- **No Firebase account or project needed to start coding.** `npm install` and two
+  commands below are all it takes.
+- **No real data or real users involved** while you're building — everything you create
+  lives only in the emulators, and resets whenever you want a clean slate.
+- Nothing you do locally can affect the shared project everyone eventually deploys to.
+
+When you're ready to put your app online, see **[DEPLOY.md](DEPLOY.md)** — that's where
+the team's real Firebase project comes in.
+
 ## Tech stack
 
 - [Vue 3](https://vuejs.org/) with `<script setup>` and TypeScript
 - [Vue Router](https://router.vuejs.org/) for pages/navigation
 - [Firebase](https://firebase.google.com/) for Authentication, Firestore (database), and
-  Storage (file uploads)
+  Storage (file uploads) — via the local emulators during development
 - [Vite](https://vite.dev/) to run and build the app
 - Plain CSS — no extra styling library to learn
 
@@ -23,79 +35,46 @@ next step.
 > **New computer?** See [SETUP.md](SETUP.md) first — it walks through installing Git,
 > Node.js, and VS Code (Windows-focused, with a macOS/Linux section too).
 
-## 1. Set up your Firebase project
+## Running it locally
 
-1. Go to the [Firebase console](https://console.firebase.google.com/) and click
-   **Add project**.
-2. Once it's created, click the **web icon (`</>`)** to register a new web app. Give it
-   any nickname. You do **not** need Firebase Hosting checked yet.
-3. Firebase will show you a `firebaseConfig` object with keys like `apiKey`,
-   `authDomain`, etc. Keep this tab open — you'll need it in step 3 below.
-4. In the left sidebar, go to **Build > Authentication > Get started**, and enable the
-   **Google** sign-in provider (you'll need to pick a support email).
-5. Go to **Build > Firestore Database > Create database**. Start in production mode
-   (this project's `firestore.rules` file already restricts access safely — see step 5
-   below).
-6. Go to **Build > Storage > Get started**, using the default settings.
-
-## 2. Install and configure the app
+You need **two terminals** open at the same time: one for the Firebase emulators, one
+for the app itself.
 
 ```sh
 npm install
-cp .env.example .env
+npm run emulators   # terminal 1 — starts local Auth/Firestore/Storage servers
 ```
-
-Open `.env` and paste in the values from your `firebaseConfig` object (step 3 above),
-one per line:
-
-```
-VITE_FIREBASE_API_KEY=...
-VITE_FIREBASE_AUTH_DOMAIN=...
-VITE_FIREBASE_PROJECT_ID=...
-VITE_FIREBASE_STORAGE_BUCKET=...
-VITE_FIREBASE_MESSAGING_SENDER_ID=...
-VITE_FIREBASE_APP_ID=...
-```
-
-`.env` is in `.gitignore` on purpose — never commit your real keys to git.
-
-## 3. Run it locally
 
 ```sh
-npm run dev
+npm run dev          # terminal 2 — starts the app
 ```
 
-Open the URL it prints. Try logging in with Google, adding a few tasks, and uploading a
-profile photo.
+Open the URL `npm run dev` prints (usually `http://localhost:5173`). Click **Log in**,
+then **Continue with Google** — the emulator shows its own fake sign-in screen where you
+can type any email address, no real Google account required. Then try adding a few
+tasks and uploading a profile photo.
 
-## 4. Deploy your Firestore/Storage security rules
+Leave both terminals running while you work. Stop either with `Ctrl+C`.
 
-The `firestore.rules` and `storage.rules` files in this repo make sure users can only
-read and write their **own** data. They only take effect once you deploy them:
+### Inspecting your data
 
-```sh
-npm install -g firebase-tools   # one-time setup
-firebase login
-firebase use --add              # pick your Firebase project
-npm run deploy:rules
-```
+`npm run emulators` also starts the **Emulator UI** at
+[http://localhost:4000](http://localhost:4000). Use it to browse Firestore documents,
+manage fake Auth users, and view uploaded files — much like the real Firebase console,
+but local.
 
-## 5. Deploy the app (optional)
+### Keeping your test data between restarts
 
-Once you've run `firebase use --add` above:
-
-```sh
-npm run deploy
-```
-
-This builds the app and publishes it to Firebase Hosting at
-`https://<your-project-id>.web.app`.
+Emulator data normally disappears when you stop `npm run emulators`. This project is set
+up to save it to a local `.emulator-data/` folder on exit and reload it next time
+automatically (see the `emulators` script in `package.json`), so your test tasks and fake
+login accounts stick around. Delete that folder any time you want a clean slate.
 
 ## Project structure
 
 ```
 src/
-  firebase/config.ts     Connects the app to your Firebase project
+  firebase/config.ts     Connects to Firebase (emulators in dev, real project when deployed)
   composables/useAuth.ts Shared login state (log in with Google, log out)
   types/Task.ts           TypeScript shape of a to-do item
   router/index.ts         Pages and the "must be logged in" guard
@@ -106,6 +85,9 @@ src/
     TasksView.vue           Firestore CRUD example (the to-do list)
     ProfileView.vue         Storage upload example (profile photo)
     NotFoundView.vue        404 page
+firestore.rules           Who can read/write what in Firestore
+storage.rules              Who can read/write what in Storage
+firebase.json               Emulator ports + Hosting/Firestore/Storage deploy config
 ```
 
 ## Ideas for extending this
@@ -116,3 +98,8 @@ src/
 - Add a Cloud Function that runs when a new task is created
 - Once you have several unrelated pieces of shared state, look into
   [Pinia](https://pinia.vuejs.org/)
+
+## Going live
+
+Ready to share your app with the world, or need to test real Google sign-in? See
+**[DEPLOY.md](DEPLOY.md)** for deploying to the team's Firebase project.

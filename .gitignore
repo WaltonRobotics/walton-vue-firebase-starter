@@ -38,10 +38,15 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 
-# Firebase config secrets and per-student project links
-.env
+# Firebase: real project secrets and per-student project links.
+# (.env itself IS committed — it only holds placeholder values for the local
+# emulators. Real credentials go in .env.production.local, covered by *.local
+# above.)
 .firebaserc
 .firebase/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+
+# Local Firebase emulator data snapshots (see `npm run emulators`)
+.emulator-data/

@@ -13,7 +13,9 @@
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
-    "deploy": "npm run build && firebase deploy",
+    "emulators": "firebase emulators:start --only auth,firestore,storage --project=demo-walton-starter --import=./.emulator-data --export-on-exit=./.emulator-data",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy:preview": "npm run build && firebase hosting:channel:deploy",
     "deploy:rules": "firebase deploy --only firestore:rules,storage:rules"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "~1.73.0",
     "eslint-plugin-vue": "~10.9.2",
+    "firebase-tools": "^15.29.0",
     "jiti": "^2.7.0",
     "npm-run-all2": "^9.0.2",
     "oxlint": "~1.73.0",

@@ -7,23 +7,52 @@ not CLAUDE.md, when project guidance changes.
 ## What this project is
 
 A starter template for **high school students** learning to build apps with Vue 3 and
-Firebase. Student-facing setup docs are in `README.md` (Firebase project setup, running
-the app) and `SETUP.md` (setting up a new computer, Windows-focused). Code should stay
-simple enough for a first-time Vue/Firebase learner to read — see "Conventions" below.
+Firebase. Student-facing docs: `README.md` (day-to-day local development),
+`SETUP.md` (setting up a new computer, Windows-focused), and `DEPLOY.md` (publishing to
+the team's shared Firebase project). Code should stay simple enough for a first-time
+Vue/Firebase learner to read — see "Conventions" below.
+
+Development runs against the **Firebase Local Emulator Suite**, not a real Firebase
+project — see "Local development model" below before touching anything Firebase-related.
 
 ## Commands
 
 - Install deps: `npm install`
-- Dev server: `npm run dev`
+- Start local Auth/Firestore/Storage emulators: `npm run emulators`
+- Dev server (needs the emulators running in another terminal): `npm run dev`
 - Type-check: `npm run type-check`
 - Lint (auto-fixes): `npm run lint`
 - Format: `npm run format`
 - Production build: `npm run build`
-- Deploy Firestore/Storage rules: `npm run deploy:rules`
-- Deploy app to Firebase Hosting: `npm run deploy`
+- Deploy Firestore/Storage rules to the team project: `npm run deploy:rules`
+- Deploy a personal preview build: `npm run deploy:preview -- <name>`
+- Deploy to the team project's live URL: `npm run deploy`
 
 There is no automated test suite in this repo. Before considering a change finished, run
-`npm run type-check`, `npm run lint`, and `npm run build` — all three must pass clean.
+`npm run type-check`, `npm run lint`, and `npm run build` — all three must pass clean. If
+you touch anything under `src/firebase/`, `firestore.rules`, `storage.rules`, or
+`firebase.json`, also verify it against the running emulators (`npm run emulators` +
+`npm run dev`), not just the build — emulator wiring can't be caught by type-check alone.
+
+## Local development model (read before touching Firebase config)
+
+- `npm run dev` always talks to the **local emulators**, never a real Firebase project.
+  This is enforced in `src/firebase/config.ts` via `if (import.meta.env.DEV)` calling
+  `connectAuthEmulator` / `connectFirestoreEmulator` / `connectStorageEmulator`. Don't
+  remove or gate that behind an extra flag — it should be unconditional for dev mode.
+- `.env` (committed) holds placeholder Firebase config values that only need to exist,
+  not be real — the emulators don't validate them. Its `VITE_FIREBASE_PROJECT_ID` must
+  stay `demo-walton-starter`, matching the `--project` flag in the `emulators` npm
+  script; the `demo-` prefix tells Firebase this is a local-only project.
+- Real credentials for the team's Firebase project go in `.env.production.local`
+  (git-ignored, template at `.env.production.local.example`). It's named
+  `.env.production.local`, not `.env.local`, specifically so Vite only loads it for
+  production builds (`npm run build`) — `npm run dev` must keep working against the
+  emulators even after a student sets this up for a deploy. Don't rename it to
+  `.env.local`.
+- `npm run emulators` passes `--import`/`--export-on-exit` against `.emulator-data/`
+  (git-ignored) so test data survives restarts. If emulator behavior seems stale or
+  wrong during debugging, deleting that folder gives a clean slate.
 
 ## Conventions (deliberate choices — don't change without being asked)
 
@@ -38,8 +67,9 @@ There is no automated test suite in this repo. Before considering a change finis
   `GoogleAuthProvider`). Email/password auth and the separate Signup page were removed
   on purpose — Google sign-in creates the account automatically.
 - Path alias `@/` maps to `src/` (configured in `vite.config.ts` and `tsconfig.app.json`).
-- Firebase config comes from `.env` (`VITE_FIREBASE_*`, see `.env.example`). Never
-  hardcode real keys in `src/firebase/config.ts` or anywhere else.
+- Firebase config comes from env vars (`VITE_FIREBASE_*`) — see "Local development
+  model" above for the `.env` vs `.env.production.local` split. Never hardcode real keys
+  in `src/firebase/config.ts` or anywhere else.
 - Route guards use `meta.requiresAuth` / `meta.requiresGuest` in `src/router/index.ts`.
   Add new protected pages there rather than guarding inside the component.
 - **Comments are welcome here**, unlike a typical terse production codebase — this is a
@@ -51,7 +81,7 @@ There is no automated test suite in this repo. Before considering a change finis
 
 ```
 src/
-  firebase/config.ts      Connects the app to a Firebase project (reads .env)
+  firebase/config.ts      Connects to Firebase (emulators in dev, real project when built)
   composables/useAuth.ts  Shared login state (Google sign-in, log out)
   types/Task.ts           TypeScript shape of a to-do item
   router/index.ts         Pages + the "must be logged in" guard
@@ -64,7 +94,7 @@ src/
     NotFoundView.vue        404 page
 firestore.rules            Per-user access rules for Firestore
 storage.rules               Per-user access rules for Storage (avatars/<uid>/...)
-firebase.json                Hosting/Firestore/Storage config for `firebase deploy`
+firebase.json                Emulator ports + Hosting/Firestore/Storage deploy config
 ```
 
 Keep this section in sync with the "Project structure" section in `README.md` — they
