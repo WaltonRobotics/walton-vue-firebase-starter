@@ -121,7 +121,8 @@ application.
 ## Going live
 
 Ready to share your app with the world, or need to test real Google sign-in? See
-**[DEPLOY.md](DEPLOY.md)** for deploying to the team's Firebase project.
+**[DEPLOY.md](DEPLOY.md)** for deploying to the team's Firebase projects (a shared
+staging project for everyday testing, and the production project for the live site).
 
 ## Installing it as an app
 

@@ -6,17 +6,21 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:staging": "run-p type-check build-only:staging",
     "preview": "vite preview",
     "build-only": "vite build",
+    "build-only:staging": "vite build --mode staging",
     "type-check": "vue-tsc --build",
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
     "format": "prettier --write --experimental-cli src/",
     "emulators": "firebase emulators:start --only auth,firestore,storage --project=demo-walton-starter --import=./.emulator-data --export-on-exit=./.emulator-data",
-    "deploy": "npm run build && firebase deploy --only hosting",
-    "deploy:preview": "npm run build && firebase hosting:channel:deploy",
-    "deploy:rules": "firebase deploy --only firestore:rules,storage:rules"
+    "deploy": "npm run build && firebase deploy --only hosting --project default",
+    "deploy:preview": "npm run build:staging && firebase hosting:channel:deploy --project staging",
+    "deploy:staging": "npm run build:staging && firebase deploy --only hosting --project staging",
+    "deploy:rules": "firebase deploy --only firestore:rules,storage:rules --project default",
+    "deploy:rules:staging": "firebase deploy --only firestore:rules,storage:rules --project staging"
   },
   "dependencies": {
     "firebase": "^12.18.0",

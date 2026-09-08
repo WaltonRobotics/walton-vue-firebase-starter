@@ -23,10 +23,12 @@ project — see "Local development model" below before touching anything Firebas
 - Type-check: `npm run type-check`
 - Lint (auto-fixes): `npm run lint`
 - Format: `npm run format`
-- Production build: `npm run build`
-- Deploy Firestore/Storage rules to the team project: `npm run deploy:rules`
-- Deploy a personal preview build: `npm run deploy:preview -- <name>`
-- Deploy to the team project's live URL: `npm run deploy`
+- Production build: `npm run build` (staging build: `npm run build:staging`)
+- Deploy Firestore/Storage rules to staging: `npm run deploy:rules:staging`; to
+  production: `npm run deploy:rules`
+- Deploy a personal preview build (staging project): `npm run deploy:preview -- <name>`
+- Deploy the shared staging link: `npm run deploy:staging`
+- Deploy to the production project's live URL: `npm run deploy`
 
 There is no automated test suite in this repo. Before considering a change finished, run
 `npm run type-check`, `npm run lint`, and `npm run build` — all three must pass clean. If
@@ -44,12 +46,18 @@ you touch anything under `src/firebase/`, `firestore.rules`, `storage.rules`, or
   not be real — the emulators don't validate them. Its `VITE_FIREBASE_PROJECT_ID` must
   stay `demo-walton-starter`, matching the `--project` flag in the `emulators` npm
   script; the `demo-` prefix tells Firebase this is a local-only project.
-- Real credentials for the team's Firebase project go in `.env.production.local`
-  (git-ignored, template at `.env.production.local.example`). It's named
-  `.env.production.local`, not `.env.local`, specifically so Vite only loads it for
-  production builds (`npm run build`) — `npm run dev` must keep working against the
-  emulators even after a student sets this up for a deploy. Don't rename it to
-  `.env.local`.
+- There are **two real Firebase projects** beyond the emulators — `staging` and
+  `production` (see `DEPLOY.md`) — each with its own credentials file and Vite build
+  mode:
+  - `.env.production.local` (git-ignored, template at `.env.production.local.example`)
+    → `npm run build` → the live project real users see.
+  - `.env.staging.local` (git-ignored, template at `.env.staging.local.example`) →
+    `npm run build:staging` (`vite build --mode staging`) → a separate project used for
+    `deploy:preview` and `deploy:staging`, so day-to-day testing never touches
+    production data.
+  - Both are named `.env.<mode>.local`, not `.env.local`, specifically so Vite only
+    loads them for their matching build — `npm run dev` must keep working against the
+    emulators regardless of what's been set up for deploys. Don't rename either.
 - `npm run emulators` passes `--import`/`--export-on-exit` against `.emulator-data/`
   (git-ignored) so test data survives restarts. If emulator behavior seems stale or
   wrong during debugging, deleting that folder gives a clean slate.
@@ -109,6 +117,20 @@ visitors can install it to their phone's home screen (Android/desktop: browser's
 - The plugin is disabled in `npm run dev` (`devOptions.enabled: false`) so it can't fight
   with Vite's dev server or the emulators. To test install behavior locally, run
   `npm run build && npm run preview` instead.
+- **Testing install on a phone from your own computer:** run
+  `npm run preview -- --host` so Vite binds to your machine's LAN IP, not just
+  `localhost` (it prints both URLs). On a phone connected to the **same Wi-Fi**, open
+  the printed `Network:` URL.
+  - **iOS Safari** installs fine over that plain `http://` LAN URL (Share → "Add to
+    Home Screen") — it doesn't require HTTPS.
+  - **Android/Chrome** does *not* — the automatic "Install app" prompt and service
+    worker registration both require a secure context, and a bare LAN IP over `http://`
+    doesn't qualify (only `https://` or literal `localhost` do). To actually see the
+    Android install prompt, deploy to a real HTTPS URL first — either a personal
+    preview channel (`npm run deploy:preview -- your-name`) or the shared
+    `npm run deploy:staging` link meant for exactly this (see `DEPLOY.md` steps 5–6).
+    Both build against the staging Firebase project, so they need `staging` linked via
+    `firebase use --add` and `.env.staging.local` set up — not production.
 - The icon files under `public/` are placeholder art (a "W" mark in the app's primary
   blue, `--color-primary` from `src/assets/main.css`). If a project gets a real logo,
   regenerate all four files at their existing sizes/filenames rather than adding new
