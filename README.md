@@ -20,6 +20,9 @@ enough for an app this size. Read the comments in that file to see how it works.
 app grows to have a lot of shared state across many unrelated pages, Pinia is the natural
 next step.
 
+> **New computer?** See [SETUP.md](SETUP.md) first — it walks through installing Git,
+> Node.js, and VS Code (Windows-focused, with a macOS/Linux section too).
+
 ## 1. Set up your Firebase project
 
 1. Go to the [Firebase console](https://console.firebase.google.com/) and click
