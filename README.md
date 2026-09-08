@@ -90,14 +90,27 @@ storage.rules              Who can read/write what in Storage
 firebase.json               Emulator ports + Hosting/Firestore/Storage deploy config
 ```
 
-## Ideas for extending this
+## Generating a new Project from this starter
 
-- Add email/password sign-in as a second option alongside Google
-- Add fields to a task (due date, priority) and a form to edit them
-- Add a "shared" list that multiple signed-in users can see and edit together
-- Add a Cloud Function that runs when a new task is created
-- Once you have several unrelated pieces of shared state, look into
-  [Pinia](https://pinia.vuejs.org/)
+This project is a template used to seed new application projects. To create a new
+GitHub repository from it in the GitHub web interface:
+
+1. Open this repository on GitHub and select **Use this template** → **Create a new
+  repository**.
+2. Enter the new repository's owner, name, and optional description. Choose whether it
+  should be public or private, then select **Create repository from template**.
+3. Clone the new repository locally, install its dependencies, and follow the setup and
+  local-running instructions above:
+
+  ```sh
+  git clone https://github.com/<owner>/<new-repository>.git
+  cd <new-repository>
+  npm install
+  ```
+
+Keep the starter structure and emulator configuration as a baseline, then replace the
+example views, components, and Firebase rules with features specific to your
+application.
 
 ## Going live
 
