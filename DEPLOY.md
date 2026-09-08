@@ -8,12 +8,12 @@ don't need this guide for that. This is for when you want to:
 - Share a working link to your app with someone else
 - Publish the "official" version of the app for everyone to use
 
-All of that happens through **one shared Firebase project** that your teacher manages.
+All of that happens through **one shared Firebase project** that your mentor manages.
 You're deploying *to* it, not creating your own.
 
 ## 1. Get access
 
-Ask your teacher to add your Google account to the team's Firebase project:
+Ask your mentor to add your Google account to the team's Firebase project:
 **Firebase console > Project settings (gear icon) > Users and permissions > Add member**.
 You'll need at least the **Firebase Hosting Admin** role to deploy the app; ask for
 **Editor** if you'll also be changing `firestore.rules` or `storage.rules`.
@@ -33,7 +33,7 @@ give it the alias `default` when asked.
 
 ## 3. Add the real Firebase config
 
-Ask your teacher for the project's `firebaseConfig` values (or find them yourself at
+Ask your mentor for the project's `firebaseConfig` values (or find them yourself at
 **Firebase console > Project settings > General > Your apps**, if you were given
 console access):
 
