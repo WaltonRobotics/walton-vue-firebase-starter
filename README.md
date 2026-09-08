@@ -85,6 +85,7 @@ src/
     TasksView.vue           Firestore CRUD example (the to-do list)
     ProfileView.vue         Storage upload example (profile photo)
     NotFoundView.vue        404 page
+public/                   App icons and other static files served as-is
 firestore.rules           Who can read/write what in Firestore
 storage.rules              Who can read/write what in Storage
 firebase.json               Emulator ports + Hosting/Firestore/Storage deploy config
@@ -121,3 +122,15 @@ application.
 
 Ready to share your app with the world, or need to test real Google sign-in? See
 **[DEPLOY.md](DEPLOY.md)** for deploying to the team's Firebase project.
+
+## Installing it as an app
+
+Once deployed (see above), anyone who visits the site can install it to their phone like
+a regular app — no app store needed:
+
+- **Android/Chrome/desktop:** the browser shows an "Install app" prompt (or use the
+  browser's menu → **Install app**).
+- **iPhone/iPad (Safari):** tap the **Share** button, then **Add to Home Screen**.
+
+This doesn't work with `npm run dev` — it's only enabled in production builds, so test it
+with `npm run build && npm run preview` or on the deployed site.

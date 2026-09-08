@@ -92,10 +92,30 @@ src/
     TasksView.vue           Firestore CRUD example (real-time to-do list)
     ProfileView.vue         Storage upload example (profile photo)
     NotFoundView.vue        404 page
+public/
+  pwa-192x192.png, pwa-512x512.png, maskable-icon-512x512.png, apple-touch-icon.png
+                            App icons used when the app is installed (see PWA section below)
 firestore.rules            Per-user access rules for Firestore
 storage.rules               Per-user access rules for Storage (avatars/<uid>/...)
 firebase.json                Emulator ports + Hosting/Firestore/Storage deploy config
 ```
+
+## PWA (installable app)
+
+This app is configured with `vite-plugin-pwa` (`vite.config.ts`) so that, once deployed,
+visitors can install it to their phone's home screen (Android/desktop: browser's
+"Install app" prompt; iOS Safari: Share → "Add to Home Screen"). Notes for agents:
+
+- The plugin is disabled in `npm run dev` (`devOptions.enabled: false`) so it can't fight
+  with Vite's dev server or the emulators. To test install behavior locally, run
+  `npm run build && npm run preview` instead.
+- The icon files under `public/` are placeholder art (a "W" mark in the app's primary
+  blue, `--color-primary` from `src/assets/main.css`). If a project gets a real logo,
+  regenerate all four files at their existing sizes/filenames rather than adding new
+  ones, since `vite.config.ts` and `index.html` both reference these exact names.
+- The `apple-mobile-web-app-*` meta tags and `apple-touch-icon` link in `index.html` are
+  there because iOS does not use the web app manifest for home-screen installs the way
+  Android does — don't remove them even though they look redundant with the manifest.
 
 Keep this section in sync with the "Project structure" section in `README.md` — they
 describe the same thing for two different audiences (agents vs. students).
