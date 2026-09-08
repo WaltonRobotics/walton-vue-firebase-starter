@@ -90,6 +90,11 @@ storage.rules              Who can read/write what in Storage
 firebase.json               Emulator ports + Hosting/Firestore/Storage deploy config
 ```
 
+See **[docs/frontend-architecture.md](docs/frontend-architecture.md)** for how these
+pieces call each other at runtime — startup order, routing/auth guards, shared state,
+and the Firestore/Storage data-flow patterns used in `TasksView.vue` and
+`ProfileView.vue`.
+
 ## Generating a new Project from this starter
 
 This project is a template used to seed new application projects. To create a new
