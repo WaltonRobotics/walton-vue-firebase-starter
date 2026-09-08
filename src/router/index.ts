@@ -24,12 +24,6 @@ const router = createRouter({
       meta: { requiresGuest: true },
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: () => import('@/views/SignupView.vue'),
-      meta: { requiresGuest: true },
-    },
-    {
       path: '/tasks',
       name: 'tasks',
       component: () => import('@/views/TasksView.vue'),

@@ -18,8 +18,8 @@ const { currentUser } = useAuth()
       <RouterLink to="/profile">profile</RouterLink>.
     </p>
     <p v-else>
-      <RouterLink to="/signup">Create an account</RouterLink> or
-      <RouterLink to="/login">log in</RouterLink> to try the Firestore to-do list example.
+      <RouterLink to="/login">Log in with Google</RouterLink> to try the Firestore to-do list
+      example.
     </p>
 
     <h2>What's included</h2>

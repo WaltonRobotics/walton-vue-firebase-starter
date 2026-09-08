@@ -4,10 +4,8 @@
 // its own copy.
 import { ref } from 'vue'
 import {
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   type User,
@@ -30,14 +28,8 @@ onAuthStateChanged(auth, (user) => {
 })
 
 export function useAuth() {
-  async function signup(email: string, password: string) {
-    await createUserWithEmailAndPassword(auth, email, password)
-  }
-
-  async function login(email: string, password: string) {
-    await signInWithEmailAndPassword(auth, email, password)
-  }
-
+  // Signing in with Google creates the account automatically the first time
+  // someone uses it, so there's no separate "sign up" step to write.
   async function loginWithGoogle() {
     await signInWithPopup(auth, new GoogleAuthProvider())
   }
@@ -46,5 +38,5 @@ export function useAuth() {
     await signOut(auth)
   }
 
-  return { currentUser, signup, login, loginWithGoogle, logout }
+  return { currentUser, loginWithGoogle, logout }
 }

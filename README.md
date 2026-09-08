@@ -1,7 +1,7 @@
 # Walton Vue + Firebase Starter
 
 A starting point for building web apps with **Vue 3** and **Firebase**. It comes with
-working examples of sign-up/login, a real-time to-do list (Firestore), and a
+working examples of Google sign-in, a real-time to-do list (Firestore), and a
 profile-photo uploader (Storage), so you can see how the pieces fit together before
 building your own features.
 
@@ -29,7 +29,7 @@ next step.
 3. Firebase will show you a `firebaseConfig` object with keys like `apiKey`,
    `authDomain`, etc. Keep this tab open — you'll need it in step 3 below.
 4. In the left sidebar, go to **Build > Authentication > Get started**, and enable the
-   **Email/Password** and **Google** sign-in providers.
+   **Google** sign-in provider (you'll need to pick a support email).
 5. Go to **Build > Firestore Database > Create database**. Start in production mode
    (this project's `firestore.rules` file already restricts access safely — see step 5
    below).
@@ -62,8 +62,8 @@ VITE_FIREBASE_APP_ID=...
 npm run dev
 ```
 
-Open the URL it prints. Try signing up with an email/password (or Google), adding a few
-tasks, and uploading a profile photo.
+Open the URL it prints. Try logging in with Google, adding a few tasks, and uploading a
+profile photo.
 
 ## 4. Deploy your Firestore/Storage security rules
 
@@ -93,14 +93,13 @@ This builds the app and publishes it to Firebase Hosting at
 ```
 src/
   firebase/config.ts     Connects the app to your Firebase project
-  composables/useAuth.ts Shared login state (sign up, log in, log out)
+  composables/useAuth.ts Shared login state (log in with Google, log out)
   types/Task.ts           TypeScript shape of a to-do item
   router/index.ts         Pages and the "must be logged in" guard
   components/NavBar.vue   Top navigation bar
   views/
     HomeView.vue           Landing page
-    LoginView.vue           Log in form
-    SignupView.vue          Sign up form
+    LoginView.vue           Google sign-in button
     TasksView.vue           Firestore CRUD example (the to-do list)
     ProfileView.vue         Storage upload example (profile photo)
     NotFoundView.vue        404 page
@@ -108,6 +107,7 @@ src/
 
 ## Ideas for extending this
 
+- Add email/password sign-in as a second option alongside Google
 - Add fields to a task (due date, priority) and a form to edit them
 - Add a "shared" list that multiple signed-in users can see and edit together
 - Add a Cloud Function that runs when a new task is created
